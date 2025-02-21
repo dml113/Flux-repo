@@ -1,11 +1,20 @@
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: podinfo
-  namespace: flux-system
+  name: nginx-deployment
+  namespace: app
 spec:
-  interval: 1m0s
-  ref:
-    branch: main
-  url: https://github.com/dml113/flux-repo
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
